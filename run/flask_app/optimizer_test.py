@@ -54,7 +54,7 @@ def ret_vol_allos():
     data = []
     frontier_y = np.linspace(0,0.05,10)
     frontier_volatility = []
-    vol_allo_dict = {}
+    # vol_allo_dict = {}
 
     for possible_return in frontier_y:
         cons = ({'type':'eq','fun':check_sum},
@@ -62,17 +62,19 @@ def ret_vol_allos():
                 {'type':'eq','fun':lambda w: get_ret_vol_sr(w)[0] - possible_return})
 
         result = minimize(minimize_volatility,init_guess,method='SLSQP',bounds=bounds,constraints=cons)
-
         frontier_volatility.append(result['fun'])
-
         ret_vol_sr = get_ret_vol_sr(result.x)
-
         allo = result.x
-
         allo_ls = allo.tolist()
+        vol_allo_dict = {
+            'volatility': ret_vol_sr[1],
+            'return': ret_vol_sr[0],
+            'sharpe': ret_vol_sr[2],
+            'allocations': allo_ls
+        }
+        # vol_allo_dict['volatility'] = ret_vol_sr[1]
+        # vol_allo_dict['volatility'][ret_vol_sr[1]] = allo_ls
 
-        vol_allo_dict[ret_vol_sr[1]] = allo_ls
-
-    data.append(vol_allo_dict)
+        data.append(vol_allo_dict)
 
     return data
