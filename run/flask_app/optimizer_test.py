@@ -6,9 +6,11 @@ import numpy as np
 import pandas as pd
 from scipy.optimize import minimize
 
+close_pickle_path = os.path.join(os.path.dirname(__file__), '..', '..', 'setup', 'data', 'stock_close.pickle')
+df_stock_close = pd.read_pickle(close_pickle_path)
+log_pickle_path = os.path.join(os.path.dirname(__file__), '..', '..', 'setup', 'data', 'log_ret.pickle')
+df_log_ret = pd.read_pickle(log_pickle_path)
 
-pickle_path = os.path.join(os.path.dirname(__file__), '..', '..', 'setup', 'data', 'log_ret.pickle')
-df_log_ret = pd.read_pickle(pickle_path)
 
 def random_weights():
     data = []
@@ -52,7 +54,7 @@ def minimize_volatility(weights):
 
 def ret_vol_allos():
     data = []
-    frontier_y = np.linspace(0,0.05,10)
+    frontier_y = np.linspace(0,0.08,10)
     frontier_volatility = []
     # vol_allo_dict = {}
 
@@ -70,7 +72,17 @@ def ret_vol_allos():
             'volatility': ret_vol_sr[1],
             'return': ret_vol_sr[0],
             'sharpe': ret_vol_sr[2],
-            'allocations': allo_ls
+            'allocations': {
+                'VTI': allo_ls[0],
+                'VEA': allo_ls[1],
+                'VWO': allo_ls[2],
+                'VNQ': allo_ls[3],
+                'XLE': allo_ls[4],
+                'BND': allo_ls[5],
+                'SCHP': allo_ls[6],
+                'VTEB': allo_ls[7],
+                'VIG': allo_ls[8]
+            }
         }
         # vol_allo_dict['volatility'] = ret_vol_sr[1]
         # vol_allo_dict['volatility'][ret_vol_sr[1]] = allo_ls
@@ -78,3 +90,33 @@ def ret_vol_allos():
         data.append(vol_allo_dict)
 
     return data
+
+
+def historical_chart():
+    data = []
+    allo_dict = ret_vol_allos()
+    allos = []
+    for i in allo_dict:
+        x = i['volatility']
+        if 0.1210 < x < 0.1214:
+            allos.append(i['allocations'])
+
+    for i in allos:
+        for k,v in i.items():
+            df_stock_close[k] *= v
+
+    df_stock_close['total'] = df_stock_close.sum(axis=1)
+    df_stock_close['daily_return'] = df_stock_close['total'].pct_change(1)
+    df_stock_close['total_return'] = df_stock_close['daily_return'].cumsum(axis=0)
+
+    for index,row in df_stock_close.iterrows():
+        chart_dict = {
+            'date': index,
+            'daily_return': row['daily_return'],
+            'total_return': row['total_return']
+        }
+        data.append(chart_dict)
+    return data
+
+
+# historical_chart()
