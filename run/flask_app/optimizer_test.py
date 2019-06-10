@@ -34,29 +34,41 @@ def get_ret_vol_sr(weights):
     return np.array([ret,vol,sr])
 
 def neg_sharpe(weights):
-    return get_ret_vol_sr(weights)[2] * -1
+    return get_ret_vol_sr(weights)[2] * - 1
 
 def check_sum(weights):
-    return np.sum(weights) -1
+    return np.sum(weights) - 1
 
-def check_sum_eq(weights):
-    return np.sum(weights[0:4]) -0.9
+def check_sum_eq_25(weights):
+    return np.sum(weights[0:4]) - 0.25
 
-cons = ({'type':'eq', 'fun': check_sum}, {'type':'eq','fun': check_sum_eq})
-bounds = ((0,.5),(0,.5),(0,.5),(0,.5),(0,0.5),(0,.5),(0,.5),(0,.5),(0,.5))
-init_guess = [(1/9),(1/9),(1/9),(1/9),(1/9),(1/9),(1/9),(1/9),(1/9)]
-opt_results = minimize(neg_sharpe,init_guess,method='SLSQP',bounds=bounds,constraints=cons)
-get_ret_vol_sr(opt_results.x)
+def check_sum_eq_50(weights, eq_pct):
+    return np.sum(weights[0:4]) - 0.50
+
+def check_sum_eq_75(weights):
+    return np.sum(weights[0:4]) - 0.75
+
+def check_sum_eq_90(weights):
+    return np.sum(weights[0:4]) - 0.90
 
 def minimize_volatility(weights):
     return get_ret_vol_sr(weights)[1]
 
-
-def ret_vol_allos():
+def ret_vol_allos(portfolio_makeup):
+    bounds = ((0,.5),(0,.5),(0,.5),(0,.5),(0,0.5),(0,.5),(0,.5),(0,.5),(0,.5))
+    init_guess = [(1/9),(1/9),(1/9),(1/9),(1/9),(1/9),(1/9),(1/9),(1/9)]
     data = []
     frontier_y = np.linspace(0,0.08,10)
     frontier_volatility = []
-    # vol_allo_dict = {}
+
+    if portfolio_makeup == .25:
+        check_sum_eq = check_sum_eq_25
+    elif portfolio_makeup == 0.50:
+        check_sum_eq = check_sum_eq_50
+    elif portfolio_makeup == 0.75:
+        check_sum_eq = check_sum_eq_75
+    else:
+        check_sum_eq = check_sum_eq_90
 
     for possible_return in frontier_y:
         cons = ({'type':'eq','fun':check_sum},
@@ -84,21 +96,18 @@ def ret_vol_allos():
                 'VIG': allo_ls[8]
             }
         }
-        # vol_allo_dict['volatility'] = ret_vol_sr[1]
-        # vol_allo_dict['volatility'][ret_vol_sr[1]] = allo_ls
-
         data.append(vol_allo_dict)
-
     return data
-
 
 def historical_chart():
     data = []
     allo_dict = ret_vol_allos()
     allos = []
-    for i in allo_dict:
-        x = i['volatility']
-        if 0.1210 < x < 0.1214:
+    m_sr = max(x['sharpe'] for x in data)
+    new_allos = []
+    for i in data:
+        max_sharpe = i['sharpe']
+        if max_sharpe == m_sr:
             allos.append(i['allocations'])
 
     for i in allos:
@@ -117,6 +126,3 @@ def historical_chart():
         }
         data.append(chart_dict)
     return data
-
-
-# historical_chart()

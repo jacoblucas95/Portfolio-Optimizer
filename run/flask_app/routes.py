@@ -20,6 +20,10 @@ def optimize():
     if request.method == 'GET':
         t = ret_vol_allos()
         return jsonify(t)
+    elif request.method == 'POST':
+        port_makeup = request.json['eq_pct']
+        allos = ret_vol_allos(port_makeup)
+        return jsonify(allos)
 
 @app.route('/allocated/chart', methods=['GET','POST'])
 def chart():
