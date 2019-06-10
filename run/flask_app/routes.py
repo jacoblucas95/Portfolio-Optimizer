@@ -1,7 +1,7 @@
 from flask import jsonify, request
 import os
 from .run import app
-from .optimizer_test import random_weights
+from .optimizer_test import random_weights, ret_vol_allos
 # from flask_app import portfolio
 
 @app.route('/')
@@ -9,8 +9,14 @@ def landing():
     test = {'this': 'works'}
     return jsonify(test)
 
-@app.route('/api/test', methods=['GET','POST'])
-def test():
+@app.route('/weights/random', methods=['GET','POST'])
+def random():
     if request.method == 'GET':
         t = random_weights()
+        return jsonify(t)
+
+@app.route('/weights/optimize', methods=['GET','POST'])
+def optimize():
+    if request.method == 'GET':
+        t = ret_vol_allos()
         return jsonify(t)
