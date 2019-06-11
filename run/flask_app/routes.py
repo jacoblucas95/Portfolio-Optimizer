@@ -18,7 +18,7 @@ def random():
 @app.route('/weights/optimize', methods=['GET','POST'])
 def optimize():
     if request.method == 'GET':
-        t = ret_vol_allos()
+        t = ret_vol_allos(0.90)
         return jsonify(t)
     elif request.method == 'POST':
         port_makeup = request.json['eq_pct']
@@ -28,5 +28,5 @@ def optimize():
 @app.route('/allocated/chart', methods=['GET','POST'])
 def chart():
     if request.method == 'GET':
-        chart = historical_chart()
+        chart = historical_chart(0.90)
         return jsonify(chart)

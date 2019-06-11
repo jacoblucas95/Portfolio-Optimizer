@@ -80,30 +80,31 @@ def ret_vol_allos(portfolio_makeup):
         ret_vol_sr = get_ret_vol_sr(result.x)
         allo = result.x
         allo_ls = allo.tolist()
-        vol_allo_dict = {
-            'volatility': ret_vol_sr[1],
-            'return': ret_vol_sr[0],
-            'sharpe': ret_vol_sr[2],
-            'allocations': {
-                'VTI': allo_ls[0],
-                'VEA': allo_ls[1],
-                'VWO': allo_ls[2],
-                'VNQ': allo_ls[3],
-                'XLE': allo_ls[4],
-                'BND': allo_ls[5],
-                'SCHP': allo_ls[6],
-                'VTEB': allo_ls[7],
-                'VIG': allo_ls[8]
+        if ret_vol_sr[1] >= .1215:
+            vol_allo_dict = {
+                'volatility': ret_vol_sr[1],
+                'return': ret_vol_sr[0],
+                'sharpe': ret_vol_sr[2],
+                'allocations': {
+                    'VTI': allo_ls[0],
+                    'VEA': allo_ls[1],
+                    'VWO': allo_ls[2],
+                    'VNQ': allo_ls[3],
+                    'XLE': allo_ls[4],
+                    'BND': allo_ls[5],
+                    'SCHP': allo_ls[6],
+                    'VTEB': allo_ls[7],
+                    'VIG': allo_ls[8]
+                }
             }
-        }
-        data.append(vol_allo_dict)
+            data.append(vol_allo_dict)
     return data
 
-def historical_chart():
+def historical_chart(portfolio_makeup):
     data = []
-    allo_dict = ret_vol_allos()
+    allo_dict = ret_vol_allos(portfolio_makeup)
     allos = []
-    m_sr = max(x['sharpe'] for x in data)
+    m_sr = max(x['sharpe'] for x in allo_dict)
     new_allos = []
     for i in data:
         max_sharpe = i['sharpe']
