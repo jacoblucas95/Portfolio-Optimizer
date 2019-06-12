@@ -118,8 +118,9 @@ def historical_chart(portfolio_makeup):
     df_stock_close['total'] = df_stock_close.sum(axis=1)
     df_stock_close['daily_return'] = df_stock_close['total'].pct_change(1)
     df_stock_close['total_return'] = df_stock_close['daily_return'].cumsum(axis=0)
+    df_stock_close1 = df_stock_close.fillna(0)
 
-    for index,row in df_stock_close.iterrows():
+    for index,row in df_stock_close1.iterrows():
         chart_dict = {
             'date': index,
             'daily_return': row['daily_return'],
