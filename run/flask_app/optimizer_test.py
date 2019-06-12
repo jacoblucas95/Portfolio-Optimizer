@@ -57,6 +57,7 @@ def minimize_volatility(weights):
 def ret_vol_allos(portfolio_makeup):
     bounds = ((0,.5),(0,.5),(0,.5),(0,.5),(0,0.5),(0,.5),(0,.5),(0,.5),(0,.5))
     init_guess = [(1/9),(1/9),(1/9),(1/9),(1/9),(1/9),(1/9),(1/9),(1/9)]
+    return_dict = {}
     data = []
     frontier_y = np.linspace(0,0.08,10)
     frontier_volatility = []
@@ -81,24 +82,27 @@ def ret_vol_allos(portfolio_makeup):
         allo = result.x
         allo_ls = allo.tolist()
         if ret_vol_sr[1] >= .1215:
-            vol_allo_dict = {
-                'volatility': ret_vol_sr[1],
-                'return': ret_vol_sr[0],
-                'sharpe': ret_vol_sr[2],
-                'allocations': {
-                    'VTI': allo_ls[0],
-                    'VEA': allo_ls[1],
-                    'VWO': allo_ls[2],
-                    'VNQ': allo_ls[3],
-                    'XLE': allo_ls[4],
-                    'BND': allo_ls[5],
-                    'SCHP': allo_ls[6],
-                    'VTEB': allo_ls[7],
-                    'VIG': allo_ls[8]
-                }
-            }
+            vol_allo_dict = [{
+                'allocations': [
+                    {'ticker':'VTI', 'weight': allo_ls[0]},
+                    {'ticker':'VEA', 'weight': allo_ls[1]},
+                    {'ticker':'VWO', 'weight': allo_ls[2]},
+                    {'ticker':'VNQ', 'weight': allo_ls[3]},
+                    {'ticker':'XLE', 'weight': allo_ls[4]},
+                    {'ticker':'BND', 'weight': allo_ls[5]},
+                    {'ticker':'SCHP', 'weight': allo_ls[6]},
+                    {'ticker':'VTEB', 'weight': allo_ls[7]},
+                    {'ticker':'VIG', 'weight': allo_ls[8]},
+                ]},
+                {
+                'info': [
+                {'volatility': ret_vol_sr[1]},
+                {'return': ret_vol_sr[0]},
+                {'sharpe': ret_vol_sr[2]}
+                ]}
+            ]
             data.append(vol_allo_dict)
-    return data
+    return vol_allo_dict
 
 def historical_chart(portfolio_makeup):
     data = []

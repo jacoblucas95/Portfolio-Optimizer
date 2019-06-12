@@ -30,3 +30,15 @@ def chart():
     if request.method == 'GET':
         chart = historical_chart(0.90)
         return jsonify(chart)
+
+@app.route('/hardcoded/weights')
+def hardcode():
+    x = [{'allocations': [{'ticker':"BND", 'weight': 1.2211568505617938e-16},
+        {'ticker': "SCHP", 'weight': 1.745578096439442e-17}]
+        },
+        {'extraInfo':[
+            {'sharpe':1},
+            {'volatility': 0.5},
+            {'return': 0.07}
+        ]}]
+    return jsonify(x)
