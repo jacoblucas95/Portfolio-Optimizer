@@ -18,11 +18,15 @@ def random():
 @app.route('/weights/optimize', methods=['GET','POST'])
 def optimize():
     if request.method == 'GET':
-        t = ret_vol_allos(0.90)
+        port = 0.9
+        vol = 3
+        t = ret_vol_allos(port, vol)
         return jsonify(t)
     elif request.method == 'POST':
-        port_makeup = request.json['eq_pct']
-        allos = ret_vol_allos(port_makeup)
+        # port_makeup = request.json['eq_pct']
+        port_makeup = 0.9
+        vol = request.json['vol']
+        allos = ret_vol_allos(port_makeup, vol)
         return jsonify(allos)
 
 @app.route('/allocated/chart', methods=['GET','POST'])

@@ -54,7 +54,7 @@ def check_sum_eq_90(weights):
 def minimize_volatility(weights):
     return get_ret_vol_sr(weights)[1]
 
-def ret_vol_allos(portfolio_makeup):
+def ret_vol_allos(portfolio_makeup, volatility):
     bounds = ((0,.5),(0,.5),(0,.5),(0,.5),(0,0.5),(0,.5),(0,.5),(0,.5),(0,.5))
     init_guess = [(1/9),(1/9),(1/9),(1/9),(1/9),(1/9),(1/9),(1/9),(1/9)]
     return_dict = {}
@@ -81,8 +81,7 @@ def ret_vol_allos(portfolio_makeup):
         ret_vol_sr = get_ret_vol_sr(result.x)
         allo = result.x
         allo_ls = allo.tolist()
-        if ret_vol_sr[1] >= .1215:
-            vol_allo_dict = [{
+        vol_allo_dict = [{
                 'allocations': [
                     {'ticker':'VTI', 'weight': allo_ls[0]},
                     {'ticker':'VEA', 'weight': allo_ls[1]},
@@ -101,8 +100,9 @@ def ret_vol_allos(portfolio_makeup):
                 {'sharpe': ret_vol_sr[2]}
                 ]}
             ]
-            data.append(vol_allo_dict)
-    return vol_allo_dict
+        data.append(vol_allo_dict)
+
+    return data[volatility]
 
 def historical_chart(portfolio_makeup):
     data = []
