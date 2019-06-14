@@ -104,9 +104,9 @@ def ret_vol_allos(portfolio_makeup, volatility):
 
     return data[volatility]
 
-def historical_chart(portfolio_makeup):
+def historical_chart(portfolio_makeup, volatility):
     data = []
-    allo_dict = ret_vol_allos(portfolio_makeup)
+    allo_dict = ret_vol_allos(portfolio_makeup, volatility)
     allos = []
     m_sr = max(x['sharpe'] for x in allo_dict)
     new_allos = []

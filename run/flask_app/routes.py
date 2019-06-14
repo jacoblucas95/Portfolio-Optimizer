@@ -25,7 +25,7 @@ def optimize():
     elif request.method == 'POST':
         # port_makeup = request.json['eq_pct']
         port_makeup = 0.9
-        vol = request.json['vol']
+        vol = request.json['vol'] - 1
         allos = ret_vol_allos(port_makeup, vol)
         return jsonify(allos)
 
@@ -33,6 +33,10 @@ def optimize():
 def chart():
     if request.method == 'GET':
         chart = historical_chart(0.90)
+        return jsonify(chart)
+    elif request.method == 'POST':
+        vol = request.method['vol'] - 1
+        chart = historical_chart(0.90, vol)
         return jsonify(chart)
 
 @app.route('/hardcoded/weights')
