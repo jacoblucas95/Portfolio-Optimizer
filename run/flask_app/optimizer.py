@@ -107,17 +107,11 @@ def ret_vol_allos(portfolio_makeup, volatility):
 def historical_chart(portfolio_makeup, volatility):
     data = []
     allo_dict = ret_vol_allos(portfolio_makeup, volatility)
-    allos = []
-    m_sr = max(x['sharpe'] for x in allo_dict)
-    new_allos = []
-    for i in data:
-        max_sharpe = i['sharpe']
-        if max_sharpe == m_sr:
-            allos.append(i['allocations'])
-
+    allos = allo_dict[0]['allocations']
     for i in allos:
-        for k,v in i.items():
-            df_stock_close[k] *= v
+        ticker = i['ticker']
+        w = i['weight']
+        df_stock_close[ticker] *= w
 
     df_stock_close['total'] = df_stock_close.sum(axis=1)
     df_stock_close['daily_return'] = df_stock_close['total'].pct_change(1)

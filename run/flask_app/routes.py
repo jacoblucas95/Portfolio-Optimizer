@@ -1,8 +1,7 @@
 from flask import jsonify, request
 import os
 from .run import app
-from .optimizer_test import random_weights, ret_vol_allos, historical_chart
-# from flask_app import portfolio
+from .optimizer import random_weights, ret_vol_allos, historical_chart
 
 @app.route('/')
 def landing():
@@ -32,7 +31,7 @@ def optimize():
 @app.route('/allocated/chart', methods=['GET','POST'])
 def chart():
     if request.method == 'GET':
-        chart = historical_chart(0.90)
+        chart = historical_chart(0.90,3)
         return jsonify(chart)
     elif request.method == 'POST':
         vol = request.method['vol'] - 1
