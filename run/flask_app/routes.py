@@ -2,6 +2,7 @@ from flask import jsonify, request
 import os
 from .run import app
 from .optimizer import random_weights, ret_vol_allos, historical_chart
+from .new_optimizations import ret_vol_allos_dummy
 
 @app.route('/')
 def landing():
@@ -49,3 +50,18 @@ def hardcode():
             {'return': 0.07}
         ]}]
     return jsonify(x)
+
+@app.route('/optimized/personal/holding',methods=['GET','POST'])
+def personal_holding():
+    if request.method == 'GET':
+        port = 0.9
+        vol = 3
+        ticker = 'C'
+        dummy_allos = ret_vol_allos_dummy(port,vol,ticker)
+        return jsonify(dummy_allos)
+    elif request.method == 'POST':
+        pass
+
+@app.route('/personal/allocated/chart')
+def personal_chart():
+    pass
