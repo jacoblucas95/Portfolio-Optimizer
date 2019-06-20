@@ -35,7 +35,7 @@ def chart():
         chart = historical_chart(0.90,3)
         return jsonify(chart)
     elif request.method == 'POST':
-        vol = request.method['vol'] - 1
+        vol = request.json['vol'] - 1
         chart = historical_chart(0.90, vol)
         return jsonify(chart)
 
@@ -60,8 +60,18 @@ def personal_holding():
         dummy_allos = ret_vol_allos_dummy(port,vol,ticker)
         return jsonify(dummy_allos)
     elif request.method == 'POST':
-        pass
+        port = 0.9
+        vol = request.json['vol'] - 1
+        ticker = request.json['ticker']
+        allos = ret_vol_allos_dummy(port,vol,ticker)
+        return jsonify(allos)
 
 @app.route('/personal/allocated/chart')
 def personal_chart():
-    pass
+    if request.method == 'GET':
+        chart = historical_chart(0.90,3)
+        return jsonify(chart)
+    elif request.method == 'POST':
+        vol = request.json['vol'] - 1
+        chart = historical_chart(0.90, vol)
+        return jsonify(chart)
