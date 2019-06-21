@@ -89,19 +89,19 @@ def faster():
             data = json.load(json_file)
         vol_data = data[vol]
         return jsonify(vol_data)
-
-@app.route('/faster/personal/optimized/weights', methods=['GET','POST'])
-def faster():
-    if request.method == 'GET':
-        with open('data.json') as json_file:
-            data = json.load(json_file)
-        return jsonify(data[1])
-    elif request.method == 'POST':
-        vol = request.json['vol'] - 1
-        ticker = request.json['ticker']
-        with open('personal_data.json') as json_file:
-            data = json.load(json_file)
-        vol_data = data[vol]
-        vol_data[0]['allocations'][ticker] = vol_data[0]['allocations']['C']
-        # vol_data[0]['allocations'].pop('C')
-        return jsonify(vol_data)
+#
+# @app.route('/faster/personal/optimized/weights', methods=['GET','POST'])
+# def personal_faster():
+#     if request.method == 'GET':
+#         with open('personal_data.json') as json_file:
+#             data = json.load(json_file)
+#         return jsonify(data[1])
+#     elif request.method == 'POST':
+#         vol = request.json['vol'] - 1
+#         ticker = request.json['ticker']
+#         with open('personal_data.json') as json_file:
+#             data = json.load(json_file)
+#         vol_data = data[vol]
+#         vol_data[0]['allocations'][ticker] = vol_data[0]['allocations']['C']
+#         # vol_data[0]['allocations'].pop('C')
+#         return jsonify(vol_data)
