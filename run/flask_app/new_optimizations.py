@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import os
+import json
 from scipy.optimize import minimize
 
 close_pickle_path = os.path.join(os.path.dirname(__file__), '..', '..', 'setup', 'data', 'stock_close.pickle')
@@ -110,3 +111,5 @@ def historical_chart(portfolio_makeup, volatility):
         }
         data.append(chart_dict)
     return data
+
+ret_vol_allos_dummy(0.9,1,'C')
