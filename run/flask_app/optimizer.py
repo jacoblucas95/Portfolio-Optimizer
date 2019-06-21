@@ -131,4 +131,4 @@ def historical_chart(portfolio_makeup, volatility):
         data.append(chart_dict)
     return data
 
-ret_vol_allos(0.9,1)
+# ret_vol_allos(0.9,1)
