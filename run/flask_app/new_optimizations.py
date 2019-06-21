@@ -85,7 +85,8 @@ def ret_vol_allos_dummy(portfolio_makeup, volatility, ticker):
             ]
         data.append(vol_allo_dict)
 
-    return data[volatility]
+    with open('personal_data.json', 'w') as json_file:
+        json.dump(data, json_file)
 
 def historical_chart(portfolio_makeup, volatility):
     data = []

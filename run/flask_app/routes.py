@@ -1,4 +1,5 @@
 from flask import jsonify, request
+import json
 import os
 from .run import app
 from .optimizer import random_weights, ret_vol_allos, historical_chart
@@ -75,3 +76,16 @@ def personal_chart():
         vol = request.json['vol'] - 1
         chart = historical_chart(0.90, vol)
         return jsonify(chart)
+
+@app.route('/faster/optimized/weights', methods=['GET','POST'])
+def faster():
+    if request.method == 'GET':
+        with open('data.json') as json_file:
+            data = json.load(json_file)
+        return jsonify(data[1])
+    elif request.method == 'POST':
+        vol = request.json['vol'] - 1
+        with open('data.json') as json_file:
+            data = json.load(json_file)
+        vol_data = data[vol]
+        return jsonify(vol_data)
