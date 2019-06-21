@@ -102,11 +102,15 @@ def ret_vol_allos(portfolio_makeup, volatility):
             ]
         data.append(vol_allo_dict)
 
-    return data[volatility]
+
+    with open('data.json', 'w') as json_file:
+        json.dump(data, json_file)
 
 def historical_chart(portfolio_makeup, volatility):
     data = []
-    allo_dict = ret_vol_allos(portfolio_makeup, volatility)
+    with open('data.json', 'r') as json_file:
+        json_data = json.load(json_file)
+    allo_dict = json_data[volatility]
     allos = allo_dict[0]['allocations']
     for i in allos:
         ticker = i['ticker']
@@ -126,3 +130,5 @@ def historical_chart(portfolio_makeup, volatility):
         }
         data.append(chart_dict)
     return data
+
+# ret_vol_allos(0.9,1)
